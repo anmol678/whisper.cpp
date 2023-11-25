@@ -5,9 +5,9 @@
 //  Created by Georgi Gerganov on 23.10.22.
 //
 
-#import <UIKit/UIKit.h>
+#import <Cocoa/Cocoa.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
 
 
 @end

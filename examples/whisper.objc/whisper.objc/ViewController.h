@@ -5,7 +5,7 @@
 //  Created by Georgi Gerganov on 23.10.22.
 //
 
-#import <UIKit/UIKit.h>
+#import <Cocoa/Cocoa.h>
 
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioQueue.h>
@@ -22,7 +22,6 @@ typedef struct
     bool isCapturing;
     bool isTranscribing;
     bool isRealtime;
-    UILabel * labelReceived;
 
     AudioQueueRef queue;
     AudioStreamBasicDescription dataFormat;
@@ -37,7 +36,7 @@ typedef struct
     void * vc;
 } StateInp;
 
-@interface ViewController : UIViewController
+@interface ViewController : NSViewController
 {
     StateInp stateInp;
 }

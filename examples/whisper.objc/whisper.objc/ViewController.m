@@ -21,11 +21,11 @@ void AudioInputCallback(void * inUserData,
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel    *labelStatusInp;
-@property (weak, nonatomic) IBOutlet UIButton   *buttonToggleCapture;
-@property (weak, nonatomic) IBOutlet UIButton   *buttonTranscribe;
-@property (weak, nonatomic) IBOutlet UIButton   *buttonRealtime;
-@property (weak, nonatomic) IBOutlet UITextView *textviewResult;
+@property (weak, nonatomic) IBOutlet NSTextField    *labelStatusInp;
+@property (weak, nonatomic) IBOutlet NSButton   *buttonToggleCapture;
+@property (weak, nonatomic) IBOutlet NSButton   *buttonTranscribe;
+@property (weak, nonatomic) IBOutlet NSButton   *buttonRealtime;
+@property (weak, nonatomic) IBOutlet NSScrollView *textviewResult;
 
 @end
 
@@ -92,10 +92,12 @@ void AudioInputCallback(void * inUserData,
 -(IBAction) stopCapturing {
     NSLog(@"Stop capturing");
 
-    _labelStatusInp.text = @"Status: Idle";
-
-    [_buttonToggleCapture setTitle:@"Start capturing" forState:UIControlStateNormal];
-    [_buttonToggleCapture setBackgroundColor:[UIColor grayColor]];
+    _labelStatusInp.stringValue = @"Status: Idle";
+    
+    [_buttonToggleCapture setTitle:@"Start capturing"];
+    _buttonToggleCapture.layer = [CALayer layer];
+    _buttonToggleCapture.layer.backgroundColor = [NSColor grayColor].CGColor;
+    _buttonToggleCapture.wantsLayer = YES;
 
     stateInp.isCapturing = false;
 
@@ -138,9 +140,11 @@ void AudioInputCallback(void * inUserData,
         stateInp.isCapturing = true;
         status = AudioQueueStart(stateInp.queue, NULL);
         if (status == 0) {
-            _labelStatusInp.text = @"Status: Capturing";
-            [sender setTitle:@"Stop Capturing" forState:UIControlStateNormal];
-            [_buttonToggleCapture setBackgroundColor:[UIColor redColor]];
+            _labelStatusInp.stringValue = @"Status: Capturing";
+            [sender setTitle:@"Stop Capturing"];
+            _buttonToggleCapture.layer = [CALayer layer];
+            _buttonToggleCapture.layer.backgroundColor = [NSColor redColor].CGColor;
+            _buttonToggleCapture.wantsLayer = YES;
         }
     }
 
@@ -149,31 +153,24 @@ void AudioInputCallback(void * inUserData,
     }
 }
 
-- (IBAction)onTranscribePrepare:(id)sender {
-    _textviewResult.text = @"Processing - please wait ...";
-
-    if (stateInp.isRealtime) {
-        [self onRealtime:(id)sender];
-    }
-
-    if (stateInp.isCapturing) {
-        [self stopCapturing];
-    }
-}
-
 - (IBAction)onRealtime:(id)sender {
     stateInp.isRealtime = !stateInp.isRealtime;
 
     if (stateInp.isRealtime) {
-        [_buttonRealtime setBackgroundColor:[UIColor greenColor]];
+        _buttonRealtime.layer = [CALayer layer];
+        _buttonRealtime.layer.backgroundColor = [NSColor greenColor].CGColor;
+        _buttonRealtime.wantsLayer = YES;
     } else {
-        [_buttonRealtime setBackgroundColor:[UIColor grayColor]];
+        _buttonRealtime.layer = [CALayer layer];
+        _buttonRealtime.layer.backgroundColor = [NSColor grayColor].CGColor;
+        _buttonRealtime.wantsLayer = YES;
     }
 
     NSLog(@"Realtime: %@", stateInp.isRealtime ? @"ON" : @"OFF");
 }
 
 - (IBAction)onTranscribe:(id)sender {
+    
     if (stateInp.isTranscribing) {
         return;
     }
@@ -213,7 +210,8 @@ void AudioInputCallback(void * inUserData,
 
         if (whisper_full(self->stateInp.ctx, params, self->stateInp.audioBufferF32, self->stateInp.n_samples) != 0) {
             NSLog(@"Failed to run the model");
-            self->_textviewResult.text = @"Failed to run the model";
+            NSTextView* textView = (NSTextView*)self->_textviewResult.documentView;
+            textView.string = @"Failed to run the model";
 
             return;
         }
@@ -243,7 +241,8 @@ void AudioInputCallback(void * inUserData,
 
         // dispatch the result to the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->_textviewResult.text = result;
+            NSTextView* textView = (NSTextView*)self->_textviewResult.documentView;
+            textView.string = result;
             self->stateInp.isTranscribing = false;
         });
     });

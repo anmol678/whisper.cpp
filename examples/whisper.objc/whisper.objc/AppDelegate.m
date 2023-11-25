@@ -6,34 +6,52 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
+
+@property (strong, nonatomic) NSStatusItem *statusItem;
+@property (strong, nonatomic) NSWindowController *mainWindowController;
 
 @end
 
 @implementation AppDelegate
 
+// https://stackoverflow.com/questions/3409985/how-to-create-a-menubar-application-for-mac
+// https://github.com/nippysaurus/WeatherRock/blob/master/BrissyBomAppDelegate.m#L59
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    return YES;
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    // Create status bar item
+    NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
+    _statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
+    [_statusItem setImage:[NSImage imageNamed:NSImageNameTouchBarAudioInputTemplate]];
+    [_statusItem setHighlightMode:YES];
+    
+    // Create menu for status bar item
+    NSMenu *menu = [[NSMenu alloc] init];
+    [menu addItemWithTitle:@"Show Window" action:@selector(showWindowAction) keyEquivalent:@"s"];
+    [menu addItemWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];
+    
+    [_statusItem setMenu:menu];
+    
+    // Load the main storyboard
+    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Storyboard" bundle:nil];
+    
+    // Instantiate the main window controller
+    self.mainWindowController = [storyboard instantiateControllerWithIdentifier:@"MainWindowController"];
 }
 
-
-#pragma mark - UISceneSession lifecycle
-
-
-- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
-    // Called when a new scene session is being created.
-    // Use this method to select a configuration to create the new scene with.
-    return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+- (void)showWindowAction {
+    [self.mainWindowController showWindow:self];
 }
 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag {
+    [self.mainWindowController.window makeKeyAndOrderFront:self];
+    return NO;
+}
 
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions {
-    // Called when the user discards a scene session.
-    // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-    // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+- (void)applicationWillTerminate:(NSNotification *)aNotification {
+    // Insert code here to tear down your application
 }
 
 
