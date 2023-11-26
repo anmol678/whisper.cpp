@@ -37,6 +37,12 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 // https://github.com/nippysaurus/WeatherRock/blob/master/BrissyBomAppDelegate.m#L59
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [self addMenuBarItem];
+    [self loadStoryboard];
+    [self registerHotKey];
+}
+
+- (void)addMenuBarItem {
     // Create status bar item
     NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
     _statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
@@ -45,18 +51,12 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     
     // Create menu for status bar item
     NSMenu *menu = [[NSMenu alloc] init];
-    [menu addItemWithTitle:@"Show Window" action:@selector(showWindowAction) keyEquivalent:@"s"];
-    [menu addItemWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];
+    NSMenuItem *showWindowItem = [menu addItemWithTitle:@"Show Window" action:@selector(showWindowAction) keyEquivalent:@"c"];
+    [showWindowItem setKeyEquivalentModifierMask: NSEventModifierFlagCommand | NSEventModifierFlagOption];
+    
+    [menu addItemWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@""];
     
     [_statusItem setMenu:menu];
-    
-    // Load the main storyboard
-    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Storyboard" bundle:nil];
-    
-    // Instantiate the main window controller
-    self.mainWindowController = [storyboard instantiateControllerWithIdentifier:@"MainWindowController"];
-
-    [self registerHotKey];
 }
 
 - (void)showWindowAction {
@@ -74,6 +74,14 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self clickMenuOption:@"4,1"];
 //    });
+}
+
+- (void)loadStoryboard {
+    // Load the main storyboard
+    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Storyboard" bundle:nil];
+    
+    // Instantiate the main window controller
+    self.mainWindowController = [storyboard instantiateControllerWithIdentifier:@"MainWindowController"];
 }
 
 - (void)registerHotKey {
