@@ -8,6 +8,7 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import <Carbon/Carbon.h>
+#import "AudioTranscriber.h"
 
 @interface AppDelegate ()
 
@@ -15,8 +16,7 @@
 @property (strong, nonatomic) NSWindowController *mainWindowController;
 @property (assign, nonatomic) BOOL isWindowVisible;
 @property (strong, nonatomic) NSMutableDictionary *menuDataStore;
-
-
+@property (strong, nonatomic) AudioTranscriber *audioTranscriber;
 
 @end
 
@@ -43,6 +43,9 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     [self addMenuBarItem];
     [self loadStoryboard];
     [self registerHotKey];
+    
+    // Initialize the AudioTranscriber property
+    self.audioTranscriber = [[AudioTranscriber alloc] init];
 }
 
 - (void)addMenuBarItem {
@@ -64,7 +67,14 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 - (void)startAction {
     [self loadMenuData];
 
-    [self showWindowAction];
+    // [self showWindowAction];
+
+    [self.audioTranscriber toggleRecordingWithCompletion:^(NSString *transcribedText) {
+        // Handle the transcribed text
+        NSLog(@"Transcribed Text: %@", transcribedText);
+    }];
+
+
     // start recording
     // if recording transcribe
     // reason transcription query with menuOptions
