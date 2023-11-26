@@ -11,7 +11,7 @@
 #define NUM_BYTES_PER_BUFFER 16*1024
 
 // callback used to process captured audio
-void AudioInputCallback(void * inUserData,
+void AudioInputCallbac(void * inUserData,
                         AudioQueueRef inAQ,
                         AudioQueueBufferRef inBuffer,
                         const AudioTimeStamp * inStartTime,
@@ -84,10 +84,10 @@ void AudioInputCallback(void * inUserData,
 
 - (void)startRecording {
     _stateInp.n_samples = 0;
-    _stateInp.vc = (__bridge void *)(self);
+    _stateInp.at = (__bridge void *)(self);
     
     OSStatus status = AudioQueueNewInput(&_stateInp.dataFormat,
-                                         AudioInputCallback,
+                                         AudioInputCallbac,
                                          &_stateInp,
                                          CFRunLoopGetCurrent(),
                                          kCFRunLoopCommonModes,
@@ -103,7 +103,9 @@ void AudioInputCallback(void * inUserData,
         _stateInp.isCapturing = true;
         status = AudioQueueStart(_stateInp.queue, NULL);
         if (status == 0) {
-            // Capturing - update UI to stop capturing
+            if (_delegate && [_delegate respondsToSelector:@selector(audioTranscriberDidStartCapturing:)]) {
+                [_delegate audioTranscriberDidStartCapturing:self];
+            }
         }
     }
     
@@ -124,6 +126,10 @@ void AudioInputCallback(void * inUserData,
     }
     
     AudioQueueDispose(_stateInp.queue, true);
+
+    if (_delegate && [_delegate respondsToSelector:@selector(audioTranscriberDidStopCapturing:)]) {
+        [_delegate audioTranscriberDidStopCapturing:self];
+    }
 }
 
 - (void)getTranscribedTextWithCompletion:(void (^)(NSString *))completion {
@@ -197,8 +203,8 @@ void AudioInputCallback(void * inUserData,
         const float tRecording = (float)self->_stateInp.n_samples / (float)self->_stateInp.dataFormat.mSampleRate;
         
         // append processing time
-        result = [result stringByAppendingString:[NSString stringWithFormat:@"\n\n[recording time:  %5.3f s]", tRecording]];
-        result = [result stringByAppendingString:[NSString stringWithFormat:@"  \n[processing time: %5.3f s]", endTime - startTime]];
+//        result = [result stringByAppendingString:[NSString stringWithFormat:@"\n\n[recording time:  %5.3f s]", tRecording]];
+//        result = [result stringByAppendingString:[NSString stringWithFormat:@"  \n[processing time: %5.3f s]", endTime - startTime]];
         
         // dispatch the result to the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -220,6 +226,46 @@ void AudioInputCallback(void * inUserData,
     format->mBitsPerChannel   = 16;
     format->mReserved         = 0;
     format->mFormatFlags      = kLinearPCMFormatFlagIsSignedInteger;
+}
+
+void AudioInputCallbac(void * inUserData,
+                        AudioQueueRef inAQ,
+                        AudioQueueBufferRef inBuffer,
+                        const AudioTimeStamp * inStartTime,
+                        UInt32 inNumberPacketDescriptions,
+                        const AudioStreamPacketDescription * inPacketDescs)
+{
+    StateIn * stateInp = (StateIn*)inUserData;
+
+    if (!stateInp->isCapturing) {
+        NSLog(@"Not capturing, ignoring audio");
+        return;
+    }
+
+    const int n = inBuffer->mAudioDataByteSize / 2;
+
+    NSLog(@"Captured %d new samples", n);
+
+    if (stateInp->n_samples + n > MAX_AUDIO_SEC*SAMPLE_RATE) {
+        NSLog(@"Too much audio data, ignoring");
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AudioTranscriber * at = (__bridge AudioTranscriber *)(stateInp->at);
+            [at stopRecording];
+            // TODO Add a delegate function that returns transcribed text
+        });
+
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        stateInp->audioBufferI16[stateInp->n_samples + i] = ((short*)inBuffer->mAudioData)[i];
+    }
+
+    stateInp->n_samples += n;
+
+    // put the buffer back in the queue
+    AudioQueueEnqueueBuffer(stateInp->queue, inBuffer, 0, NULL);
 }
 
 @end

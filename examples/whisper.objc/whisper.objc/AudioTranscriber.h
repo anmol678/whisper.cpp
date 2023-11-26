@@ -32,10 +32,21 @@ typedef struct
 
     struct whisper_context * ctx;
 
-    void * vc;
+    void * at;
 } StateIn;
 
+@class AudioTranscriber;
+
+@protocol AudioTranscriberDelegate <NSObject>
+
+- (void)audioTranscriberDidStartCapturing:(AudioTranscriber *)transcriber;
+- (void)audioTranscriberDidStopCapturing:(AudioTranscriber *)transcriber;
+
+@end
+
 @interface AudioTranscriber : NSObject
+
+@property (weak, nonatomic) id<AudioTranscriberDelegate> delegate;
 
 - (void)toggleRecordingWithCompletion:(void (^)(NSString *transcribedText))completion;
 - (void)startRecording;

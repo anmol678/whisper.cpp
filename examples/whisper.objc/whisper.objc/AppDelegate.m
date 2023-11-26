@@ -46,6 +46,7 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     
     // Initialize the AudioTranscriber property
     self.audioTranscriber = [[AudioTranscriber alloc] init];
+    self.audioTranscriber.delegate = self;
 }
 
 - (void)addMenuBarItem {
@@ -68,23 +69,20 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     [self loadMenuData];
 
     // [self showWindowAction];
-
+    
     [self.audioTranscriber toggleRecordingWithCompletion:^(NSString *transcribedText) {
         // Handle the transcribed text
         NSLog(@"Transcribed Text: %@", transcribedText);
     }];
 
-
-    // start recording
-    // if recording transcribe
     // reason transcription query with menuOptions
     
     // perform click
+    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    //        [self clickMenuOption:@"4,1"];
+    //    });
+    
     // provide feedback
-
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self clickMenuOption:@"4,1"];
-//    });
 }
 
 - (void)loadMenuData {
@@ -216,6 +214,20 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
+}
+
+#pragma mark - AudioTranscriberDelegate Methods
+
+- (void)audioTranscriberDidStartCapturing:(AudioTranscriber *)transcriber {
+    // Update UI to reflect that recording has started
+    // For example, change the menu item image or play a sound
+    NSLog(@"Recording has started");
+}
+
+- (void)audioTranscriberDidStopCapturing:(AudioTranscriber *)transcriber {
+    // Update UI to reflect that recording has stopped
+    // For example, revert the menu item image or play a different sound
+    NSLog(@"Recording has stopped");
 }
 
 
