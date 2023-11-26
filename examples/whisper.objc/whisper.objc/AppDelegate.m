@@ -45,6 +45,10 @@
     [self.mainWindowController showWindow:self];
     NSArray *menuOptions = [self getMenuOptions];
     NSLog(@"Menu Options: %@", menuOptions);
+
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self clickMenuOption:@"4,1"];
+//    });
 }
 
 - (NSArray *)getMenuOptions {
@@ -108,13 +112,11 @@
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:pathToBinary];
     
-    NSArray *arguments = [NSArray arrayWithObjects:@"-click", arg];
+    NSArray *arguments = [NSArray arrayWithObjects:@"-click", arg, nil];
     [task setArguments:arguments];
     
     NSPipe *pipe = [NSPipe pipe];
     [task setStandardOutput:pipe];
-    
-    NSFileHandle *file = [pipe fileHandleForReading];
     
     [task launch];
 }
