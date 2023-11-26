@@ -7,7 +7,6 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "MenuBarInterface/MenuBarInterface-Swift.h"
 
 @interface AppDelegate ()
 
@@ -44,6 +43,80 @@
 
 - (void)showWindowAction {
     [self.mainWindowController showWindow:self];
+    NSArray *menuOptions = [self getMenuOptions];
+    NSLog(@"Menu Options: %@", menuOptions);
+}
+
+- (NSArray *)getMenuOptions {
+    NSDictionary *options = @{(__bridge id)kAXTrustedCheckOptionPrompt: @YES};
+    BOOL accessibilityEnabled = AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)options);
+    
+    if (!accessibilityEnabled) {
+        NSLog(@"Accessibility API is disabled");
+    }
+    
+    NSString *pathToBinary = [[NSBundle mainBundle] pathForResource:@"menu" ofType:@""];
+    
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:pathToBinary];
+    
+    NSArray *arguments = [NSArray arrayWithObjects:@"-async", nil];
+    [task setArguments:arguments];
+    
+    NSPipe *pipe = [NSPipe pipe];
+    [task setStandardOutput:pipe];
+    
+    NSFileHandle *file = [pipe fileHandleForReading];
+    
+    [task launch];
+    
+    NSData *data = [file readDataToEndOfFile];
+
+    // NSString *output = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    // NSLog(@"%@", output);
+
+    NSError *error = nil;
+    NSArray *output = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+
+    if (error) {
+        NSLog(@"Error parsing JSON: %@", error);
+    } else {
+        for (NSDictionary *item in output) {
+            NSMutableDictionary *newItem = [[NSMutableDictionary alloc] init];
+            newItem[@"path"] = item[@"subtitle"];
+            newItem[@"title"] = item[@"title"];
+            newItem[@"arg"] = item[@"arg"];
+            [result addObject:newItem];
+        }
+    }
+    
+    return result;
+}
+
+- (void)clickMenuOption:(NSString *)arg {
+    NSDictionary *options = @{(__bridge id)kAXTrustedCheckOptionPrompt: @YES};
+    BOOL accessibilityEnabled = AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)options);
+    
+    if (!accessibilityEnabled) {
+        NSLog(@"Accessibility API is disabled");
+    }
+    
+    NSString *pathToBinary = [[NSBundle mainBundle] pathForResource:@"menu" ofType:@""];
+    
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:pathToBinary];
+    
+    NSArray *arguments = [NSArray arrayWithObjects:@"-click", arg];
+    [task setArguments:arguments];
+    
+    NSPipe *pipe = [NSPipe pipe];
+    [task setStandardOutput:pipe];
+    
+    NSFileHandle *file = [pipe fileHandleForReading];
+    
+    [task launch];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag {

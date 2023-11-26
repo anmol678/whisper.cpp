@@ -19,35 +19,13 @@
 		18627C9B29052CFF00BD2A04 /* ggml-base.en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 18627C9A29052CFF00BD2A04 /* ggml-base.en.bin */; };
 		18ABE15A2AF556340044A204 /* ggml-backend.c in Sources */ = {isa = PBXBuildFile; fileRef = 18ABE1572AF556340044A204 /* ggml-backend.c */; };
 		18ABE15B2AF556340044A204 /* ggml-quants.c in Sources */ = {isa = PBXBuildFile; fileRef = 18ABE1592AF556340044A204 /* ggml-quants.c */; };
+		792EB2A22B12CD0900F3D555 /* menu in Resources */ = {isa = PBXBuildFile; fileRef = 792EB2A12B12CD0900F3D555 /* menu */; };
 		79F1FA662B1200C00065F66E /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79F1FA652B1200C00065F66E /* Storyboard.storyboard */; };
-		79F1FA702B1207830065F66E /* MenuBarInterface.docc in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA6F2B1207830065F66E /* MenuBarInterface.docc */; };
-		79F1FA712B1207830065F66E /* MenuBarInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 79F1FA6E2B1207830065F66E /* MenuBarInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		79F1FA742B1207830065F66E /* MenuBarInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79F1FA6C2B1207830065F66E /* MenuBarInterface.framework */; };
-		79F1FA752B1207830065F66E /* MenuBarInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79F1FA6C2B1207830065F66E /* MenuBarInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		79F1FA852B1207CD0065F66E /* MenuItem.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA7C2B1207CC0065F66E /* MenuItem.pb.swift */; };
-		79F1FA862B1207CD0065F66E /* AX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA7D2B1207CC0065F66E /* AX.swift */; };
-		79F1FA872B1207CD0065F66E /* MenuItem.proto in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA7E2B1207CC0065F66E /* MenuItem.proto */; };
-		79F1FA882B1207CD0065F66E /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA7F2B1207CC0065F66E /* MenuBar.swift */; };
-		79F1FA892B1207CD0065F66E /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA802B1207CD0065F66E /* MenuItem.swift */; };
-		79F1FA8A2B1207CD0065F66E /* IndexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA812B1207CD0065F66E /* IndexParser.swift */; };
-		79F1FA932B1209F70065F66E /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 79F1FA922B1209F70065F66E /* SwiftProtobuf */; };
-		79F1FA952B1209F70065F66E /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 79F1FA942B1209F70065F66E /* SwiftProtobufPluginLibrary */; };
-		79F1FA972B1241A70065F66E /* MenuBarInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F1FA962B1241A70065F66E /* MenuBarInterface.swift */; };
 		7FE3424B2A0C3FA20015A058 /* whisper-encoder-impl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE342452A0C3FA20015A058 /* whisper-encoder-impl.m */; };
 		7FE3424C2A0C3FA20015A058 /* whisper-encoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FE342472A0C3FA20015A058 /* whisper-encoder.mm */; };
 		7FE3424D2A0C3FA20015A058 /* whisper-decoder-impl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE3424A2A0C3FA20015A058 /* whisper-decoder-impl.m */; };
 		7FE3424F2A0C418A0015A058 /* ggml-base.en-encoder.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 7FE3424E2A0C418A0015A058 /* ggml-base.en-encoder.mlmodelc */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		79F1FA722B1207830065F66E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 18627C6E29052BDF00BD2A04 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 79F1FA6B2B1207830065F66E;
-			remoteInfo = MenuBarInterface;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		184447202AB21B25007D6BFE /* CopyFiles */ = {
@@ -66,7 +44,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				79F1FA752B1207830065F66E /* MenuBarInterface.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,17 +74,8 @@
 		18ABE1572AF556340044A204 /* ggml-backend.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "ggml-backend.c"; path = "../../../ggml-backend.c"; sourceTree = "<group>"; };
 		18ABE1582AF556340044A204 /* ggml-impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ggml-impl.h"; path = "../../../ggml-impl.h"; sourceTree = "<group>"; };
 		18ABE1592AF556340044A204 /* ggml-quants.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "ggml-quants.c"; path = "../../../ggml-quants.c"; sourceTree = "<group>"; };
+		792EB2A12B12CD0900F3D555 /* menu */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = menu; sourceTree = "<group>"; };
 		79F1FA652B1200C00065F66E /* Storyboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
-		79F1FA6C2B1207830065F66E /* MenuBarInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MenuBarInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		79F1FA6E2B1207830065F66E /* MenuBarInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuBarInterface.h; sourceTree = "<group>"; };
-		79F1FA6F2B1207830065F66E /* MenuBarInterface.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MenuBarInterface.docc; sourceTree = "<group>"; };
-		79F1FA7C2B1207CC0065F66E /* MenuItem.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItem.pb.swift; sourceTree = "<group>"; };
-		79F1FA7D2B1207CC0065F66E /* AX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AX.swift; sourceTree = "<group>"; };
-		79F1FA7E2B1207CC0065F66E /* MenuItem.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; path = MenuItem.proto; sourceTree = "<group>"; };
-		79F1FA7F2B1207CC0065F66E /* MenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
-		79F1FA802B1207CD0065F66E /* MenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
-		79F1FA812B1207CD0065F66E /* IndexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexParser.swift; sourceTree = "<group>"; };
-		79F1FA962B1241A70065F66E /* MenuBarInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarInterface.swift; sourceTree = "<group>"; };
 		7FE342452A0C3FA20015A058 /* whisper-encoder-impl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "whisper-encoder-impl.m"; sourceTree = "<group>"; };
 		7FE342462A0C3FA20015A058 /* whisper-encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "whisper-encoder.h"; sourceTree = "<group>"; };
 		7FE342472A0C3FA20015A058 /* whisper-encoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "whisper-encoder.mm"; sourceTree = "<group>"; };
@@ -122,16 +90,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79F1FA742B1207830065F66E /* MenuBarInterface.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		79F1FA692B1207830065F66E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				79F1FA952B1209F70065F66E /* SwiftProtobufPluginLibrary in Frameworks */,
-				79F1FA932B1209F70065F66E /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				18627C7829052BDF00BD2A04 /* whisper.objc */,
-				79F1FA6D2B1207830065F66E /* MenuBarInterface */,
 				18627C7729052BDF00BD2A04 /* Products */,
 				79F1FA912B1209F70065F66E /* Frameworks */,
 			);
@@ -152,7 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				18627C7629052BDF00BD2A04 /* whisper.objc.app */,
-				79F1FA6C2B1207830065F66E /* MenuBarInterface.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,6 +116,7 @@
 		18627C7829052BDF00BD2A04 /* whisper.objc */ = {
 			isa = PBXGroup;
 			children = (
+				792EB2A12B12CD0900F3D555 /* menu */,
 				18ABE1562AF556340044A204 /* ggml-backend-impl.h */,
 				18ABE1572AF556340044A204 /* ggml-backend.c */,
 				18ABE1552AF556340044A204 /* ggml-backend.h */,
@@ -189,22 +146,6 @@
 			path = whisper.objc;
 			sourceTree = "<group>";
 		};
-		79F1FA6D2B1207830065F66E /* MenuBarInterface */ = {
-			isa = PBXGroup;
-			children = (
-				79F1FA7D2B1207CC0065F66E /* AX.swift */,
-				79F1FA812B1207CD0065F66E /* IndexParser.swift */,
-				79F1FA7F2B1207CC0065F66E /* MenuBar.swift */,
-				79F1FA7C2B1207CC0065F66E /* MenuItem.pb.swift */,
-				79F1FA7E2B1207CC0065F66E /* MenuItem.proto */,
-				79F1FA802B1207CD0065F66E /* MenuItem.swift */,
-				79F1FA962B1241A70065F66E /* MenuBarInterface.swift */,
-				79F1FA6E2B1207830065F66E /* MenuBarInterface.h */,
-				79F1FA6F2B1207830065F66E /* MenuBarInterface.docc */,
-			);
-			path = MenuBarInterface;
-			sourceTree = "<group>";
-		};
 		79F1FA912B1209F70065F66E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,17 +169,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		79F1FA672B1207830065F66E /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				79F1FA712B1207830065F66E /* MenuBarInterface.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		18627C7529052BDF00BD2A04 /* whisper.objc */ = {
 			isa = PBXNativeTarget;
@@ -253,34 +183,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				79F1FA732B1207830065F66E /* PBXTargetDependency */,
 			);
 			name = whisper.objc;
 			productName = whisper.objc;
 			productReference = 18627C7629052BDF00BD2A04 /* whisper.objc.app */;
 			productType = "com.apple.product-type.application";
-		};
-		79F1FA6B2B1207830065F66E /* MenuBarInterface */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 79F1FA792B1207830065F66E /* Build configuration list for PBXNativeTarget "MenuBarInterface" */;
-			buildPhases = (
-				79F1FA672B1207830065F66E /* Headers */,
-				79F1FA682B1207830065F66E /* Sources */,
-				79F1FA692B1207830065F66E /* Frameworks */,
-				79F1FA6A2B1207830065F66E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = MenuBarInterface;
-			packageProductDependencies = (
-				79F1FA922B1209F70065F66E /* SwiftProtobuf */,
-				79F1FA942B1209F70065F66E /* SwiftProtobufPluginLibrary */,
-			);
-			productName = MenuBarInterface;
-			productReference = 79F1FA6C2B1207830065F66E /* MenuBarInterface.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -294,9 +201,6 @@
 					18627C7529052BDF00BD2A04 = {
 						CreatedOnToolsVersion = 14.0.1;
 					};
-					79F1FA6B2B1207830065F66E = {
-						CreatedOnToolsVersion = 15.0.1;
-					};
 				};
 			};
 			buildConfigurationList = 18627C7129052BDF00BD2A04 /* Build configuration list for PBXProject "whisper.objc" */;
@@ -309,14 +213,12 @@
 			);
 			mainGroup = 18627C6D29052BDF00BD2A04;
 			packageReferences = (
-				79F1FA8C2B12088B0065F66E /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 			);
 			productRefGroup = 18627C7729052BDF00BD2A04 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				18627C7529052BDF00BD2A04 /* whisper.objc */,
-				79F1FA6B2B1207830065F66E /* MenuBarInterface */,
 			);
 		};
 /* End PBXProject section */
@@ -327,16 +229,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FE3424F2A0C418A0015A058 /* ggml-base.en-encoder.mlmodelc in Resources */,
+				792EB2A22B12CD0900F3D555 /* menu in Resources */,
 				79F1FA662B1200C00065F66E /* Storyboard.storyboard in Resources */,
 				18627C8629052BE000BD2A04 /* Assets.xcassets in Resources */,
 				18627C9B29052CFF00BD2A04 /* ggml-base.en.bin in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		79F1FA6A2B1207830065F66E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,30 +258,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		79F1FA682B1207830065F66E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				79F1FA8A2B1207CD0065F66E /* IndexParser.swift in Sources */,
-				79F1FA852B1207CD0065F66E /* MenuItem.pb.swift in Sources */,
-				79F1FA972B1241A70065F66E /* MenuBarInterface.swift in Sources */,
-				79F1FA702B1207830065F66E /* MenuBarInterface.docc in Sources */,
-				79F1FA872B1207CD0065F66E /* MenuItem.proto in Sources */,
-				79F1FA862B1207CD0065F66E /* AX.swift in Sources */,
-				79F1FA892B1207CD0065F66E /* MenuItem.swift in Sources */,
-				79F1FA882B1207CD0065F66E /* MenuBar.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		79F1FA732B1207830065F66E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 79F1FA6B2B1207830065F66E /* MenuBarInterface */;
-			targetProxy = 79F1FA722B1207830065F66E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		18627C8D29052BE000BD2A04 /* Debug */ = {
@@ -508,7 +381,6 @@
 		18627C9029052BE000BD2A04 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -538,7 +410,6 @@
 		18627C9129052BE000BD2A04 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -565,83 +436,6 @@
 			};
 			name = Release;
 		};
-		79F1FA772B1207830065F66E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = QA6B2J6365;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.stabb.MenuBarInterface;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		79F1FA782B1207830065F66E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = QA6B2J6365;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
-				PRODUCT_BUNDLE_IDENTIFIER = com.stabb.MenuBarInterface;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -663,40 +457,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		79F1FA792B1207830065F66E /* Build configuration list for PBXNativeTarget "MenuBarInterface" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				79F1FA772B1207830065F66E /* Debug */,
-				79F1FA782B1207830065F66E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		79F1FA8C2B12088B0065F66E /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-protobuf.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.25.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		79F1FA922B1209F70065F66E /* SwiftProtobuf */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79F1FA8C2B12088B0065F66E /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobuf;
-		};
-		79F1FA942B1209F70065F66E /* SwiftProtobufPluginLibrary */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 79F1FA8C2B12088B0065F66E /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobufPluginLibrary;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 18627C6E29052BDF00BD2A04 /* Project object */;
 }
