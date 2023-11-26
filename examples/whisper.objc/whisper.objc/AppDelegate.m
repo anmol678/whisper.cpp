@@ -28,7 +28,7 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     int l = hotKeyID.id;
     switch (l) {
         case 1: // This is the hotkey ID
-            [(__bridge AppDelegate *)userData showWindowAction];
+            [(__bridge AppDelegate *)userData startAction];
             break;
         default:
             break;
@@ -49,29 +49,29 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     // Create status bar item
     NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
     _statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
-    [_statusItem setImage:[NSImage imageNamed:NSImageNameTouchBarAudioInputTemplate]];
-    [_statusItem setHighlightMode:YES];
+    _statusItem.button.image = [NSImage imageNamed:NSImageNameTouchBarAudioInputTemplate];
     
     // Create menu for status bar item
     NSMenu *menu = [[NSMenu alloc] init];
-    NSMenuItem *showWindowItem = [menu addItemWithTitle:@"Show Window" action:@selector(showWindowAction) keyEquivalent:@"c"];
-    [showWindowItem setKeyEquivalentModifierMask: NSEventModifierFlagCommand | NSEventModifierFlagOption];
+    NSMenuItem *startItem = [menu addItemWithTitle:@"Start" action:@selector(startAction) keyEquivalent:@"c"];
+    [startItem setKeyEquivalentModifierMask: NSEventModifierFlagCommand | NSEventModifierFlagOption];
     
     [menu addItemWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@""];
     
     [_statusItem setMenu:menu];
 }
 
-- (void)showWindowAction {
-    if (self.isWindowVisible) {
-        [self.mainWindowController close];
-    } else {
-        [self.mainWindowController showWindow:self];
-    }
-    self.isWindowVisible = !self.isWindowVisible;
-
+- (void)startAction {
     [self loadMenuData];
+
+    [self showWindowAction];
+    // start recording
+    // if recording transcribe
+    // reason transcription query with menuOptions
     
+    // perform click
+    // provide feedback
+
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self clickMenuOption:@"4,1"];
 //    });
@@ -94,6 +94,15 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     }
 
     // NSLog(@"Menu Options: %@", menuOptions);
+}
+
+- (void)showWindowAction {
+    if (self.isWindowVisible) {
+        [self.mainWindowController close];
+    } else {
+        [self.mainWindowController showWindow:self];
+    }
+    self.isWindowVisible = !self.isWindowVisible;
 }
 
 - (void)loadStoryboard {
