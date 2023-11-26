@@ -14,6 +14,9 @@
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) NSWindowController *mainWindowController;
 @property (assign, nonatomic) BOOL isWindowVisible;
+@property (strong, nonatomic) NSMutableDictionary *menuDataStore;
+
+
 
 @end
 
@@ -67,13 +70,30 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     }
     self.isWindowVisible = !self.isWindowVisible;
 
-
-    NSArray *menuOptions = [self getMenuOptions];
-    NSLog(@"Menu Options: %@", menuOptions);
-
+    [self loadMenuData];
+    
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self clickMenuOption:@"4,1"];
 //    });
+}
+
+- (void)loadMenuData {
+    NSString *frontmostApp = [[NSWorkspace sharedWorkspace] frontmostApplication].localizedName;
+    NSArray *menuOptions = [self.menuDataStore objectForKey:frontmostApp];
+
+    if (!menuOptions) {
+        NSDictionary *menuData = [self getMenuOptions];
+        NSString *appName = [menuData objectForKey:@"appName"];
+        menuOptions = [menuData objectForKey:@"menuOptions"];
+
+        if (!self.menuDataStore) {
+            self.menuDataStore = [[NSMutableDictionary alloc] init];
+        }
+    
+        [self.menuDataStore setObject:menuOptions forKey:appName];
+    }
+
+    // NSLog(@"Menu Options: %@", menuOptions);
 }
 
 - (void)loadStoryboard {
@@ -96,10 +116,10 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     InstallApplicationEventHandler(&MyHotKeyHandler, 1, &eventType, (__bridge void *)(self), NULL);
 }
 
-- (NSArray *)getMenuOptions {
+- (NSDictionary *)getMenuOptions {
     NSDictionary *options = @{(__bridge id)kAXTrustedCheckOptionPrompt: @YES};
     BOOL accessibilityEnabled = AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)options);
-    
+
     if (!accessibilityEnabled) {
         NSLog(@"Accessibility API is disabled");
     }
@@ -128,6 +148,7 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     NSArray *output = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
 
     NSMutableArray *result = [[NSMutableArray alloc] init];
+    NSString *appName = @"";
 
     if (error) {
         NSLog(@"Error parsing JSON: %@", error);
@@ -138,10 +159,13 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
             newItem[@"title"] = item[@"title"];
             newItem[@"arg"] = item[@"arg"];
             [result addObject:newItem];
+            if ([item objectForKey:@"appDisplayName"]) {
+                appName = item[@"appDisplayName"];
+            }
         }
     }
     
-    return result;
+    return @{@"menuOptions": result, @"appName": appName};
 }
 
 - (void)clickMenuOption:(NSString *)arg {
