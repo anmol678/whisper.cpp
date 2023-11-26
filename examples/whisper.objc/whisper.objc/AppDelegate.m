@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "MenuBarInterface/MenuBarInterface-Swift.h"
 
 @interface AppDelegate ()
 
