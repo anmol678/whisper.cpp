@@ -7,15 +7,31 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import <Carbon/Carbon.h>
 
 @interface AppDelegate ()
 
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) NSWindowController *mainWindowController;
+@property (assign, nonatomic) BOOL isWindowVisible;
 
 @end
 
 @implementation AppDelegate
+
+OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void *userData) {
+    EventHotKeyID hotKeyID;
+    GetEventParameter(anEvent, kEventParamDirectObject, typeEventHotKeyID, NULL, sizeof(hotKeyID), NULL, &hotKeyID);
+    int l = hotKeyID.id;
+    switch (l) {
+        case 1: // This is the hotkey ID
+            [(__bridge AppDelegate *)userData showWindowAction];
+            break;
+        default:
+            break;
+    }
+    return noErr;
+}
 
 // https://stackoverflow.com/questions/3409985/how-to-create-a-menubar-application-for-mac
 // https://github.com/nippysaurus/WeatherRock/blob/master/BrissyBomAppDelegate.m#L59
@@ -39,16 +55,37 @@
     
     // Instantiate the main window controller
     self.mainWindowController = [storyboard instantiateControllerWithIdentifier:@"MainWindowController"];
+
+    [self registerHotKey];
 }
 
 - (void)showWindowAction {
-    [self.mainWindowController showWindow:self];
+    if (self.isWindowVisible) {
+        [self.mainWindowController close];
+    } else {
+        [self.mainWindowController showWindow:self];
+    }
+    self.isWindowVisible = !self.isWindowVisible;
+
+
     NSArray *menuOptions = [self getMenuOptions];
     NSLog(@"Menu Options: %@", menuOptions);
 
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self clickMenuOption:@"4,1"];
 //    });
+}
+
+- (void)registerHotKey {
+    EventHotKeyRef myHotKeyRef;
+    EventHotKeyID myHotKeyID;
+    EventTypeSpec eventType;
+    eventType.eventClass = kEventClassKeyboard;
+    eventType.eventKind = kEventHotKeyPressed;
+    myHotKeyID.signature = 'mhk1';
+    myHotKeyID.id = 1;
+    RegisterEventHotKey(8, cmdKey + optionKey, myHotKeyID, GetApplicationEventTarget(), 0, &myHotKeyRef);
+    InstallApplicationEventHandler(&MyHotKeyHandler, 1, &eventType, (__bridge void *)(self), NULL);
 }
 
 - (NSArray *)getMenuOptions {
