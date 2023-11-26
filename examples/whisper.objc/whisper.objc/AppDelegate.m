@@ -36,9 +36,6 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     return noErr;
 }
 
-// https://stackoverflow.com/questions/3409985/how-to-create-a-menubar-application-for-mac
-// https://github.com/nippysaurus/WeatherRock/blob/master/BrissyBomAppDelegate.m#L59
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self addMenuBarItem];
     [self loadStoryboard];
@@ -50,6 +47,10 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 }
 
 - (void)addMenuBarItem {
+    // https://stackoverflow.com/questions/3409985/how-to-create-a-menubar-application-for-mac
+    // https://github.com/nippysaurus/WeatherRock/blob/master/BrissyBomAppDelegate.m#L59
+    // https://developer.apple.com/documentation/uikit/uicommand/adding_menus_and_shortcuts_to_the_menu_bar_and_user_interface
+    // https://developer.apple.com/videos/play/wwdc2022/10061/
     // Create status bar item
     NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
     _statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
@@ -86,6 +87,8 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 }
 
 - (void)loadMenuData {
+    // https://github.com/BenziAhamed/Menu-Bar-Search
+    // https://github.com/BalliAsghar/menu-bar-search-raycast
     NSString *frontmostApp = [[NSWorkspace sharedWorkspace] frontmostApplication].localizedName;
     NSArray *menuOptions = [self.menuDataStore objectForKey:frontmostApp];
 
@@ -122,6 +125,8 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 }
 
 - (void)registerHotKey {
+    // https://eastmanreference.com/complete-list-of-applescript-key-codes
+    // https://github.com/sindresorhus/KeyboardShortcuts
     EventHotKeyRef myHotKeyRef;
     EventHotKeyID myHotKeyID;
     EventTypeSpec eventType;
