@@ -67,13 +67,19 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
 }
 
 - (void)startAction {
-    [self loadMenuData];
+     // Get the frontmost application name
+    NSString *frontmostApp = [[NSWorkspace sharedWorkspace] frontmostApplication].localizedName;
+    
+    // Pass the frontmost application name to loadMenuData and get the menu options
+    NSArray *menuOptions = [self loadMenuDataForApp:frontmostApp];
 
     // [self showWindowAction];
     
     [self.audioTranscriber toggleRecordingWithCompletion:^(NSString *transcribedText) {
         // Handle the transcribed text
-        NSLog(@"Transcribed Text: %@", transcribedText);
+        if (![transcribedText isEqualToString:@""]) {
+            NSLog(@"Transcribed Text: %@", transcribedText);
+        }
     }];
 
     // reason transcription query with menuOptions
@@ -86,25 +92,26 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     // provide feedback
 }
 
-- (void)loadMenuData {
+- (NSArray *)loadMenuDataForApp:(NSString *)appName {
     // https://github.com/BenziAhamed/Menu-Bar-Search
     // https://github.com/BalliAsghar/menu-bar-search-raycast
-    NSString *frontmostApp = [[NSWorkspace sharedWorkspace] frontmostApplication].localizedName;
-    NSArray *menuOptions = [self.menuDataStore objectForKey:frontmostApp];
+    NSArray *menuOptions = [self.menuDataStore objectForKey:appName];
 
     if (!menuOptions) {
         NSDictionary *menuData = [self getMenuOptions];
-        NSString *appName = [menuData objectForKey:@"appName"];
+        NSString *retrievedAppName = [menuData objectForKey:@"appName"];
         menuOptions = [menuData objectForKey:@"menuOptions"];
 
         if (!self.menuDataStore) {
             self.menuDataStore = [[NSMutableDictionary alloc] init];
         }
     
-        [self.menuDataStore setObject:menuOptions forKey:appName];
+        [self.menuDataStore setObject:menuOptions forKey:retrievedAppName];
     }
 
     // NSLog(@"Menu Options: %@", menuOptions);
+
+    return  menuOptions;
 }
 
 - (void)showWindowAction {
