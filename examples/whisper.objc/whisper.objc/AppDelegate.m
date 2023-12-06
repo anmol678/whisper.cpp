@@ -79,10 +79,20 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
         // Handle the transcribed text
         if (![transcribedText isEqualToString:@""]) {
             NSLog(@"Transcribed Text: %@", transcribedText);
+
+            // Filter menu options based on fuzzy keyword matching with transcribedText
+            NSArray *relevantMenuOptions = [self filterMenuOptions:menuOptions withTranscribedText:transcribedText];
+
+            NSLog(@"Menu Options: %@", relevantMenuOptions);
+            
+            // Call OpenAI API to interpret the transcribed text
+            [self interpretTranscribedText:transcribedText withMenuOptions:relevantMenuOptions frontmostApp:frontmostApp];
+
         }
     }];
 
     // reason transcription query with menuOptions
+
     
     // perform click
     //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -217,6 +227,72 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     [task setStandardOutput:pipe];
     
     [task launch];
+}
+
+- (NSArray *)filterMenuOptions:(NSArray *)menuOptions withTranscribedText:(NSString *)transcribedText {
+    // Implement fuzzy keyword matching here and return the filtered menu options
+    // This is a placeholder for the actual fuzzy matching logic
+    // Return the first five menu options or all if there are less than five
+    NSRange range = NSMakeRange(0, MIN(menuOptions.count, 5));
+    NSArray *filteredMenuOptions = [menuOptions subarrayWithRange:range];
+    return filteredMenuOptions;
+    return menuOptions; // Return the filtered menu options
+}
+
+- (void)interpretTranscribedText:(NSString *)transcribedText withMenuOptions:(NSArray *)menuOptions frontmostApp:(NSString *)frontmostApp {
+    // Prepare the data for the POST request
+    NSString *apiKey = @"";
+    NSString *apiEndpoint = @"https://api.openai.com/v1/chat/completions";
+    NSDictionary *headers = @{@"Authorization": [NSString stringWithFormat:@"Bearer %@", apiKey],
+                              @"Content-Type": @"application/json"};
+
+    // Construct the system and user messages
+    NSMutableArray *messages = [NSMutableArray array];
+    [messages addObject:@{@"role": @"system", @"content": @"You are a helpful copilot for macOS. Your task is to interpret transcribed voice commands and recommend an action based on the current application's provided menu options. Please respond with a JSON object containing two keys - option: the recommended option; message: anything else you want to say to the user (use this when there's no clear option match or another issue)."}];
+    [messages addObject:@{@"role": @"user", @"content": [NSString stringWithFormat:@"Interpret this command for %@: %@. Respond only with the menu option.", frontmostApp, transcribedText]}];
+    
+    // Add relevant menu options to the context if necessary
+    NSMutableString *optionsContent = [NSMutableString stringWithString:@"Pick one of the following menu options: "];
+    for (NSDictionary *option in menuOptions) {
+        [optionsContent appendFormat:@"\n%@ > %@, ", option[@"path"], option[@"title"]];
+    }
+    
+    [messages addObject:@{@"role": @"user", @"content": optionsContent}];
+
+    NSDictionary *body = @{@"model": @"gpt-4-1106-preview", 
+                           @"messages": messages,
+                           @"temperature": @0,
+                           @"max_tokens": @50,
+                           @"response_format": @{@"type": @"json_object"}};
+
+    NSLog(@"%@", body);
+    
+    NSError *error;
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
+
+    if (error) {
+        NSLog(@"Error preparing request data: %@", error.localizedDescription);
+        return;
+    }
+
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiEndpoint]];
+    [request setHTTPMethod:@"POST"];
+    [request setAllHTTPHeaderFields:headers];
+    [request setHTTPBody:postData];
+
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
+                                                completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error making API request: %@", error.localizedDescription);
+        } else {
+            NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            NSString *recommendedAction = jsonResponse[@"choices"][0][@"message"][@"content"];
+            // Parse the response to get the recommended action and return
+            NSLog(@"Recommended Action: %@", recommendedAction);
+        }
+    }];
+    [dataTask resume];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag {
