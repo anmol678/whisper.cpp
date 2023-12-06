@@ -93,25 +93,51 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
                            withMenuOptions:relevantMenuOptions
                               frontmostApp:frontmostApp
                          completionHandler:^(NSDictionary *result) {
+                
                 NSString *option = result[@"option"];
+                if (option && ![option isEqual:[NSNull null]] && [option length] > 0) {
+                    [self selectAndClickMenuOption:option fromOptions:relevantMenuOptions];
+                }
+
+                
                 NSString *message = result[@"message"];
-                // Use the option and message as needed
-                NSLog(@"Option: %@, Message: %@", option, message);
+                if (message && ![message isEqualToString:@""]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSAlert *alert = [[NSAlert alloc] init];
+                        [alert setMessageText:message];
+                        [alert addButtonWithTitle:@"OK"];
+                        [alert runModal];
+                    });
+                }
+
+                // NSLog(@"Option: %@, Message: %@", option, message);
             }];
             
         }
     }];
-    
-    // reason transcription query with menuOptions
-    
-    
-    // perform click
-    //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    //        [self clickMenuOption:@"4,1"];
-    //    });
-    
-    // provide feedback
 }
+
+- (void)selectAndClickMenuOption:(NSString *)option fromOptions:(NSArray *)menuOptions {
+    NSArray *optionTokens = [option componentsSeparatedByString:@">"];
+    NSString *menuTitle = [[optionTokens lastObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+    // Find the menu option with the title equal to the last token
+    NSDictionary *selectedMenuOption;
+    for (NSDictionary *menuOption in menuOptions) {
+        if ([menuOption[@"title"] isEqualToString:menuTitle]) {
+            selectedMenuOption = menuOption;
+            break;
+        }
+    }
+
+    // Invoke menu option
+    NSString *argValue = selectedMenuOption[@"arg"];
+    if (argValue) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self clickMenuOption:argValue];
+        });
+    }
+} 
 
 - (NSArray *)loadMenuDataForApp:(NSString *)appName {
     // https://github.com/BenziAhamed/Menu-Bar-Search
@@ -244,9 +270,9 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     // Implement fuzzy keyword matching here and return the filtered menu options
     // This is a placeholder for the actual fuzzy matching logic
     // Return the first five menu options or all if there are less than five
-    NSRange range = NSMakeRange(0, MIN(menuOptions.count, 5));
-    NSArray *filteredMenuOptions = [menuOptions subarrayWithRange:range];
-    return filteredMenuOptions;
+    // NSRange range = NSMakeRange(0, MIN(menuOptions.count, 5));
+    // NSArray *filteredMenuOptions = [menuOptions subarrayWithRange:range];
+    // return filteredMenuOptions;
     return menuOptions; // Return the filtered menu options
 }
 
@@ -259,8 +285,8 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     
     // Construct the system and user messages
     NSMutableArray *messages = [NSMutableArray array];
-    [messages addObject:@{@"role": @"system", @"content": @"You are a helpful copilot for macOS. Your task is to interpret transcribed voice commands and recommend an action based on the current application's provided menu options. Please respond with a JSON object containing two keys - option: the recommended option; message: anything else you want to say to the user (use this when there's no clear option match or another issue)."}];
-    [messages addObject:@{@"role": @"user", @"content": [NSString stringWithFormat:@"Interpret this command for %@: %@. Respond only with the menu option.", frontmostApp, transcribedText]}];
+    [messages addObject:@{@"role": @"system", @"content": @"You are a helpful copilot for macOS. Your task is to interpret transcribed voice commands and recommend an action based on the current application's provided menu options. Please respond with a JSON object in the following format: {\"option\": \"<recommended_option>\", \"message\": \"<additional_information>\"}. Use the 'option' key to provide the recommended menu option. Only include the 'message' key if there is an error or if an appropriate option isn't available."}];
+    [messages addObject:@{@"role": @"user", @"content": [NSString stringWithFormat:@"Interpret this command for %@: %@. Respond with a JSON object as defined above, including a 'message' only if necessary.", frontmostApp, transcribedText]}];
     
     // Add relevant menu options to the context if necessary
     NSMutableString *optionsContent = [NSMutableString stringWithString:@"Pick one of the following menu options: "];
@@ -276,7 +302,7 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
                            @"max_tokens": @50,
                            @"response_format": @{@"type": @"json_object"}};
     
-    NSLog(@"%@", body);
+    // NSLog(@"%@", body);
     
     NSError *error;
     NSData *postData = [NSJSONSerialization dataWithJSONObject:body options:0 error:&error];
@@ -295,7 +321,7 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request
                                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
-         if (error) {
+        if (error) {
             NSLog(@"Error making API request: %@", error.localizedDescription);
             if (completionHandler) {
                 completionHandler(@{@"message": error.localizedDescription});
@@ -315,12 +341,12 @@ OSStatus MyHotKeyHandler(EventHandlerCallRef nextHandler, EventRef anEvent, void
                 NSDictionary *messageJson = [NSJSONSerialization JSONObjectWithData:messageData options:0 error:&messageJsonError];
                 
                 if (messageJsonError) {
-                    // NSLog(@"Error parsing message JSON: %@", messageJsonError.localizedDescription);
+                    NSLog(@"Error parsing message JSON: %@", messageJsonError.localizedDescription);
                     if (completionHandler) {
                         completionHandler(@{@"message": messageJsonError.localizedDescription});
                     }
                 } else {
-                    // NSLog(@"Recommended Action: %@", messageJson);
+                    NSLog(@"Recommended Action: %@", messageJson);
                     if (completionHandler) {
                         completionHandler(messageJson);
                     }
